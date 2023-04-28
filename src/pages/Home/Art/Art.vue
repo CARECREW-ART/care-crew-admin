@@ -1,6 +1,6 @@
 <script setup>
 import $ from 'jquery';
-import Pagination from '../../components/Pagination.vue';
+import Pagination from '../../../components/Pagination.vue';
 </script>
 
 <script>
@@ -33,6 +33,9 @@ export default {
             } else {
                 $('#dropdown').val('ON');
             }
+        },
+        changePage(page) {
+            this.pagination.currentPage = page;
         }
     }
 }
@@ -56,7 +59,7 @@ export default {
             </button>
             <div class="flex p-2 bg-[#d5def3] rounded-md">
                 <input type="text" class="outline-none bg-transparent" placeholder="Search...">
-                <img class="cursor-pointer" src="../../assets/search.svg" />
+                <img class="cursor-pointer" src="../../../assets/search.svg" />
             </div>
         </div>
         <div class="w-full h-[1px] bg-[#edebf0]  mt-4"></div>
@@ -84,10 +87,7 @@ export default {
                             </p>
                         </td>
                         <td>
-                            <div class="flex w-[50%] ">
-                                <img class="cursor-pointer mr-3" src="../../assets/edit.svg" />
-                                <img class="cursor-pointer" src="../../assets/trash.svg" />
-                            </div>
+                            <button class="bg-blue-500 hover:bg-blue-400 rounded-md text-white px-3 py-1">Detail</button>
                         </td>
                     </tr>
                 </tbody>
@@ -98,7 +98,7 @@ export default {
         <div class="flex justify-between w-[98%] mx-auto py-4 items-center">
             <p>Showing 1 to 20 of enteries</p>
             <Pagination :currentPage="pagination.currentPage" :totalPages="pagination.totalPage"
-                :maxVisiblePages="pagination.maxVisiblePages" />
+                :maxVisiblePages="pagination.maxVisiblePages" @change-page="changePage" />
         </div>
     </div>
 </template>

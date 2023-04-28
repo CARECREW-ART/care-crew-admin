@@ -17,8 +17,8 @@ export default {
 </script>
 
 <template>
-    <div class="w-screen h-screen flex">
-        <div class="group w-[6%] hover:w-[19%] flex flex-col items-center mt-3 transition-all">
+    <div class="w-screen h-screen flex overflow-auto">
+        <div class="group w-[6%] hover:w-[19%] flex flex-col items-center pt-3 transition-all sticky top-0">
             <p class="w-4/5">Care Crew</p>
             <div class="flex w-4/5 h-11 justify-center group-hover:justify-normal group-hover:pl-2 items-center rounded-md hover:bg-[#eeeeee65] hover:cursor-pointer"
                 :class="{ '!bg-gradient-to-l from-sky-300 to-blue-600': activeItem == 'dashboard' }"
@@ -69,7 +69,8 @@ export default {
                     :class="{ 'text-white': activeItem == 'rental' }">Rental Data</p>
             </div>
         </div>
-        <div class="w-full bg-[#F8F7FA]">
+
+        <div class="w-full bg-[#F8F7FA] overflow-y-auto">
             <div class="flex justify-end items-center w-[98%] my-7 h-16 mx-auto bg-white rounded-md drop-shadow-sm">
                 <div>
 
