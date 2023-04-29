@@ -14,13 +14,13 @@ export default {
                 totalPage: 5,
                 maxVisiblePages: 3,
             },
-            artData: [
+            customerData: [
                 {
-                    name: 'Dino',
-                    email: 'DinoSukinem@gmail.com',
-                    salary: '2.000.000',
+                    fullName: 'Dino Sukono s',
+                    email: 'DiniSukinem@gmail.com',
+                    nickname: 'Bu Dini',
                     phone: '08812321234',
-                    status: 'active'
+                    username: 'dini123'
                 }
             ]
         }
@@ -41,11 +41,12 @@ export default {
             this.currentItemDropDown = num;
         },
         detailPage() {
-            this.$router.push({ name: 'detail-art' });
+            this.$router.push({ name: 'detail-customer' });
         }
     }
 }
 </script>
+
 
 <template>
     <div class="flex flex-col w-full bg-white rounded-md drop-shadow-sm">
@@ -74,25 +75,21 @@ export default {
             <table class="w-full">
                 <thead class="text-left border-b-[1px] border-[#edebf0] ">
                     <th class="pl-4 py-4 w-[16%]">
-                        Nama
+                        Full Name
                     </th>
                     <th class="w-[20%]">Email</th>
-                    <th class="w-[16%]">Salary</th>
+                    <th class="w-[16%]">Nickname</th>
                     <th class="w-[20%]">Phone Number</th>
-                    <th class="w-[16%]">Status</th>
+                    <th class="w-[16%]">Username</th>
                     <th>Action</th>
                 </thead>
                 <tbody>
-                    <tr v-for="item, index in artData" :key="index" class="border-b-[1px] border-[#edebf0]">
-                        <td class="pl-4 py-4">{{ item.name }}</td>
+                    <tr v-for="item, index in customerData" :key="index" class="border-b-[1px] border-[#edebf0]">
+                        <td class="pl-4 py-4">{{ item.fullName }}</td>
                         <td>{{ item.email }}</td>
-                        <td>{{ item.salary }}</td>
+                        <td>{{ item.nickname }}</td>
                         <td>{{ item.phone }}</td>
-                        <td>
-                            <p class="bg-green-100 inline-block py-[2px] px-2 rounded-md text-green-500 ">{{
-                                item.status }}
-                            </p>
-                        </td>
+                        <td>{{ item.username }}</td>
                         <td>
                             <button @click="detailPage"
                                 class="bg-blue-500 hover:bg-blue-400 rounded-md text-white px-3 py-1">Detail</button>

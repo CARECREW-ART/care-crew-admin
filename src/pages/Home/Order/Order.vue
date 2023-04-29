@@ -14,13 +14,12 @@ export default {
                 totalPage: 5,
                 maxVisiblePages: 3,
             },
-            artData: [
+            orderData: [
                 {
-                    name: 'Dino',
-                    email: 'DinoSukinem@gmail.com',
-                    salary: '2.000.000',
-                    phone: '08812321234',
-                    status: 'active'
+                    customerName: 'Dini',
+                    profileImageCustomer: '../../../assets/dummy_art.jpg',
+                    paymentType: 'Virtual Account',
+                    status: 'Success'
                 }
             ]
         }
@@ -41,11 +40,12 @@ export default {
             this.currentItemDropDown = num;
         },
         detailPage() {
-            this.$router.push({ name: 'detail-art' });
+            this.$router.push({ name: 'detail-customer' });
         }
     }
 }
 </script>
+
 
 <template>
     <div class="flex flex-col w-full bg-white rounded-md drop-shadow-sm">
@@ -73,29 +73,23 @@ export default {
         <div>
             <table class="w-full">
                 <thead class="text-left border-b-[1px] border-[#edebf0] ">
-                    <th class="pl-4 py-4 w-[16%]">
-                        Nama
+                    <th class="pl-4 py-4 ">
+                        Customer Name
                     </th>
-                    <th class="w-[20%]">Email</th>
-                    <th class="w-[16%]">Salary</th>
-                    <th class="w-[20%]">Phone Number</th>
-                    <th class="w-[16%]">Status</th>
-                    <th>Action</th>
+                    <th>Payment Type</th>
+                    <th>Status</th>
                 </thead>
                 <tbody>
-                    <tr v-for="item, index in artData" :key="index" class="border-b-[1px] border-[#edebf0]">
-                        <td class="pl-4 py-4">{{ item.name }}</td>
-                        <td>{{ item.email }}</td>
-                        <td>{{ item.salary }}</td>
-                        <td>{{ item.phone }}</td>
-                        <td>
-                            <p class="bg-green-100 inline-block py-[2px] px-2 rounded-md text-green-500 ">{{
-                                item.status }}
-                            </p>
+                    <tr v-for="item, index in orderData" :key="index" class="border-b-[1px] border-[#edebf0]">
+                        <td class="pl-4 py-4 flex items-center">
+                            <div class="h-12 w-12 mr-2 overflow-hidden rounded-full">
+                                <img src="../../../assets/dummy_art.jpg" alt="profile">
+                            </div>
+                            <p>{{ item.customerName }}</p>
                         </td>
+                        <td>{{ item.paymentType }}</td>
                         <td>
-                            <button @click="detailPage"
-                                class="bg-blue-500 hover:bg-blue-400 rounded-md text-white px-3 py-1">Detail</button>
+                            <p class="inline px-4 py-2 bg-green-300 text-white rounded-full">{{ item.status }}</p>
                         </td>
                     </tr>
                 </tbody>

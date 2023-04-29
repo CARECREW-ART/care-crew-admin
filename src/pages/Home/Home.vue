@@ -45,28 +45,28 @@ export default {
                     :class="{ 'text-white': activeItem == 'art' }">Art Data</p>
             </div>
             <div class="flex w-4/5 h-11 justify-center group-hover:justify-normal group-hover:pl-2 items-center mt-1 rounded-md hover:bg-[#eeeeee65] hover:cursor-pointer"
-                :class="{ '!bg-gradient-to-l from-sky-300 to-blue-600': activeItem == 'user' }"
-                @click="changeItemNav('user')">
-                <template v-if="activeItem == 'user'">
+                :class="{ '!bg-gradient-to-l from-sky-300 to-blue-600': activeItem == 'customer' }"
+                @click="changeItemNav('customer')">
+                <template v-if="activeItem == 'customer'">
                     <img src="../../assets/user-white.svg">
                 </template>
                 <template v-else>
                     <img src="../../assets/user.svg">
                 </template>
                 <p class="hidden group-hover:block ml-3 text-lg text-slate-600"
-                    :class="{ 'text-white': activeItem == 'user' }">User Data</p>
+                    :class="{ 'text-white': activeItem == 'customer' }">Customer</p>
             </div>
             <div class="flex w-4/5 h-11 justify-center group-hover:justify-normal group-hover:pl-2 items-center mt-1 rounded-md hover:bg-[#eeeeee65] hover:cursor-pointer"
-                :class="{ '!bg-gradient-to-l from-sky-300 to-blue-600': activeItem == 'rental' }"
-                @click="changeItemNav('rental')">
-                <template v-if="activeItem == 'rental'">
+                :class="{ '!bg-gradient-to-l from-sky-300 to-blue-600': activeItem == 'order' }"
+                @click="changeItemNav('order')">
+                <template v-if="activeItem == 'order'">
                     <img src="../../assets/rental-white.svg">
                 </template>
                 <template v-else>
                     <img src="../../assets/rental.svg">
                 </template>
                 <p class="hidden group-hover:block ml-3 text-lg text-slate-600"
-                    :class="{ 'text-white': activeItem == 'rental' }">Rental Data</p>
+                    :class="{ 'text-white': activeItem == 'order' }">Order Data</p>
             </div>
         </div>
 

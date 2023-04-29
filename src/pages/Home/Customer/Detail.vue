@@ -14,12 +14,6 @@ export default {
                 phoneNumber: '08123421245631',
                 gender: 'Wanita',
                 address: 'Blok K No. 40',
-                salary: '2.000.000',
-                skill: [
-                    'Memasak', 'Mencuci'
-                ],
-                experience: 'Pernah Bekerja Di Jonggol',
-                accountNumber: 'Bank Jago | Dini Sukarni | 102948253'
             },
             pagination: {
                 currentPage: 1,
@@ -88,25 +82,6 @@ export default {
                     <p class="font-semibold flex-[0_0_auto] mr-1 text-slate-900">Address:</p>
                     <p class="font-lights ">{{ details.address }}</p>
                 </div>
-                <div class="flex mb-1">
-                    <p class="font-semibold flex-[0_0_auto] mr-1 text-slate-900">Salary:</p>
-                    <p class="font-lights ">{{ details.salary }}</p>
-                </div>
-                <div class="flex mb-1">
-                    <p class="font-semibold flex-[0_0_auto] mr-1 text-slate-900">Skill:</p>
-                    <p class="font-lights bg-green-400 px-3 py-1 rounded-full text-white mr-2"
-                        v-for="skill in details.skill">
-                        {{
-                            skill }}</p>
-                </div>
-                <div class="flex mb-1">
-                    <p class="font-semibold flex-[0_0_auto] mr-1 text-slate-900">Experience:</p>
-                    <p class="font-lights ">{{ details.experience }}</p>
-                </div>
-                <div class="flex">
-                    <p class="font-semibold flex-[0_0_auto] mr-1 text-slate-900">Account Number:</p>
-                    <p class="font-lights ">{{ details.accountNumber }}</p>
-                </div>
             </div>
         </div>
         <!-- table Pagination -->
@@ -137,24 +112,16 @@ export default {
             <!-- table -->
             <table class="w-full">
                 <thead class="text-left border-b-[1px] border-[#edebf0]">
-                    <th class="pl-4 py-4">Tenant Name</th>
-                    <th>Length Of Lease</th>
+                    <th class="pl-4 py-4">Payment Type</th>
                     <th>Status</th>
                 </thead>
                 <tbody>
                     <tr class="border-b-[1px] border-[#edebf0]">
                         <td class="pl-4 py-6 flex items-center">
-                            <!-- customer image -->
-                            <div class="h-12 w-12 mr-2 overflow-hidden rounded-full">
-                                <img src="../../../assets/dummy_art.jpg" alt="profile">
-                            </div>
-                            <p>Anna Angi</p>
+                            <p>Virtual Account</p>
                         </td>
                         <td>
-                            <p>2 months</p>
-                        </td>
-                        <td>
-                            <p class="inline px-3 py-2 rounded-full bg-blue-300 text-white">On Progress</p>
+                            <p class="inline px-3 py-2 rounded-full bg-green-300 text-white">Success</p>
                         </td>
                     </tr>
                 </tbody>
