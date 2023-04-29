@@ -7,7 +7,7 @@ import TextField from '../components/TextField.vue';
 export default {
     methods: {
         login() {
-            this.$router.push({ name: 'admin' });
+            this.$router.push({ name: 'dashboard' });
         }
     },
 }

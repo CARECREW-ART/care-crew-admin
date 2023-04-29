@@ -10,6 +10,9 @@ export default {
             console.log(item);
             this.activeItem = item;
             this.$router.push({ name: item });
+        },
+        logout() {
+            this.$router.push({ name: 'login' });
         }
     }
 
@@ -24,10 +27,10 @@ export default {
                 :class="{ '!bg-gradient-to-l from-sky-300 to-blue-600': activeItem == 'dashboard' }"
                 @click="changeItemNav('dashboard')">
                 <template v-if="activeItem == 'dashboard'">
-                    <img src="../../assets/home-white.svg">
+                    <img src="@/assets/home-white.svg">
                 </template>
                 <template v-else>
-                    <img src="../../assets/home.svg">
+                    <img src="@/assets/home.svg">
                 </template>
                 <p class="hidden group-hover:block ml-3 text-lg text-slate-600"
                     :class="{ 'text-white': activeItem == 'dashboard' }">Dashboard</p>
@@ -36,10 +39,10 @@ export default {
                 :class="{ '!bg-gradient-to-l from-sky-300 to-blue-600': activeItem == 'art' }"
                 @click="changeItemNav('art')">
                 <template v-if="activeItem == 'art'">
-                    <img src="../../assets/user-white.svg">
+                    <img src="@/assets/user-white.svg">
                 </template>
                 <template v-else>
-                    <img src="../../assets/user.svg">
+                    <img src="@/assets/user.svg">
                 </template>
                 <p class="hidden group-hover:block ml-3 text-lg text-slate-600"
                     :class="{ 'text-white': activeItem == 'art' }">Art Data</p>
@@ -48,10 +51,10 @@ export default {
                 :class="{ '!bg-gradient-to-l from-sky-300 to-blue-600': activeItem == 'customer' }"
                 @click="changeItemNav('customer')">
                 <template v-if="activeItem == 'customer'">
-                    <img src="../../assets/user-white.svg">
+                    <img src="@/assets/user-white.svg">
                 </template>
                 <template v-else>
-                    <img src="../../assets/user.svg">
+                    <img src="@/assets/user.svg">
                 </template>
                 <p class="hidden group-hover:block ml-3 text-lg text-slate-600"
                     :class="{ 'text-white': activeItem == 'customer' }">Customer</p>
@@ -60,10 +63,10 @@ export default {
                 :class="{ '!bg-gradient-to-l from-sky-300 to-blue-600': activeItem == 'order' }"
                 @click="changeItemNav('order')">
                 <template v-if="activeItem == 'order'">
-                    <img src="../../assets/rental-white.svg">
+                    <img src="@/assets/rental-white.svg">
                 </template>
                 <template v-else>
-                    <img src="../../assets/rental.svg">
+                    <img src="@/assets/rental.svg">
                 </template>
                 <p class="hidden group-hover:block ml-3 text-lg text-slate-600"
                     :class="{ 'text-white': activeItem == 'order' }">Order Data</p>
@@ -72,9 +75,7 @@ export default {
 
         <div class="w-full bg-[#F8F7FA] overflow-y-auto">
             <div class="flex justify-end items-center w-[98%] my-7 h-16 mx-auto bg-white rounded-md drop-shadow-sm">
-                <div>
-
-                </div>
+                <img @click="logout" class="w-6 mr-5 cursor-pointer" src="@/assets/exit.svg" alt="exit">
             </div>
             <div class="w-[98%] mx-auto">
                 <router-view></router-view>

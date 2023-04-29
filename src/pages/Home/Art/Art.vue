@@ -1,6 +1,6 @@
 <script setup>
 import $ from 'jquery';
-import Pagination from '../../../components/Pagination.vue';
+import Pagination from '@/components/Pagination.vue';
 </script>
 
 <script>
@@ -53,7 +53,7 @@ export default {
             <button @click="checkFocus" id="dropdown"
                 class="group flex relative border border-black w-14 rounded-md items-center justify-evenly" value="OFF">
                 <p>{{ currentItemDropDown }}</p>
-                <img class="transition-all group-focus:rotate-180" src="../../../assets/arrow_down.svg" alt="">
+                <img class="transition-all group-focus:rotate-180" src="@/assets/arrow_down.svg" alt="">
                 <div
                     class="hidden group-focus:block absolute bottom-[-130px] bg-white drop-shadow-md rounded-md w-full p-2">
                     <ul>
@@ -66,7 +66,7 @@ export default {
             </button>
             <div class="flex p-2 bg-[#d5def3] rounded-md">
                 <input type="text" class="outline-none bg-transparent" placeholder="Search...">
-                <img class="cursor-pointer" src="../../../assets/search.svg" />
+                <img class="cursor-pointer" src="@/assets/search.svg" />
             </div>
         </div>
         <div class="w-full h-[1px] bg-[#edebf0]  mt-4"></div>
