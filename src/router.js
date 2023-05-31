@@ -57,4 +57,18 @@ const router = createRouter({
     ]
 });
 
+function isAuthentication(){
+    return localStorage.getItem('token') !== null
+}
+
+router.beforeEach(async(to, form)=>{
+
+    if(to.name != 'login' && !isAuthentication()){
+        return {name:'login'}
+    }else if(to.name == 'login' && isAuthentication()){
+        console.log('as')
+        return {name:'admin'}
+   }
+});
+
 export default router;

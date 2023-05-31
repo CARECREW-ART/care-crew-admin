@@ -25,6 +25,7 @@ export default {
             ]
         }
     },
+    
     methods: {
         checkFocus() {
             if ($('#dropdown').val() == 'ON') {
