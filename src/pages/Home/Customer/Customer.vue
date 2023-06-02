@@ -1,6 +1,10 @@
 <script setup>
 import $ from 'jquery';
 import Pagination from '@/components/Pagination.vue';
+import ApiServices from '../../../services/ApiService';
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/css/index.css';
+import swal from 'sweetalert';
 </script>
 
 <script>
@@ -14,16 +18,13 @@ export default {
                 totalPage: 5,
                 maxVisiblePages: 3,
             },
-            customerData: [
-                {
-                    fullName: 'Dino Sukono s',
-                    email: 'DiniSukinem@gmail.com',
-                    nickname: 'Bu Dini',
-                    phone: '08812321234',
-                    username: 'dini123'
-                }
-            ]
+            customerData: [],
+            search: '',
+            isLoading: false
         }
+    },
+    mounted(){
+        this.getCustomer()
     },
     methods: {
         checkFocus() {
@@ -34,14 +35,30 @@ export default {
                 $('#dropdown').val('ON');
             }
         },
+        async getCustomer(page){
+            this.isLoading = true
+            await ApiServices.getCustomer(this.currentItemDropDown, this.search, page != null ? page : 1, 
+            (success)=>{
+                this.isLoading = false
+                this.pagination.totalPage = Math.ceil(success.total / success.per_page)
+                this.customerData = success.data
+            }, (error)=>{
+                this.isLoading = false
+                swal({
+                    title: 'Data tidak berhasil di ambil',
+                    icon: 'warning'
+                })
+            })
+        },
         changePage(page) {
             this.pagination.currentPage = page;
+            this.getCustomer(page)
         },
         changeDropDownItem(num) {
             this.currentItemDropDown = num;
         },
-        detailPage() {
-            this.$router.push({ name: 'detail-customer' });
+        detailPage(id) {
+            this.$router.push({ name: 'detail-customer', params:{ id : id} });
         }
     }
 }
@@ -66,8 +83,8 @@ export default {
                 </div>
             </button>
             <div class="flex p-2 bg-[#d5def3] rounded-md">
-                <input type="text" class="outline-none bg-transparent" placeholder="Search...">
-                <img class="cursor-pointer" src="@/assets/search.svg" />
+                <input v-model="search" type="text" class="outline-none bg-transparent" placeholder="Search..." @keydown.enter="getCustomer()">
+                <img class="cursor-pointer" src="@/assets/search.svg" @click="getCustomer()" />
             </div>
         </div>
         <div class="w-full h-[1px] bg-[#edebf0]  mt-4"></div>
@@ -85,13 +102,13 @@ export default {
                 </thead>
                 <tbody>
                     <tr v-for="item, index in customerData" :key="index" class="border-b-[1px] border-[#edebf0]">
-                        <td class="pl-4 py-4">{{ item.fullName }}</td>
-                        <td>{{ item.email }}</td>
-                        <td>{{ item.nickname }}</td>
-                        <td>{{ item.phone }}</td>
-                        <td>{{ item.username }}</td>
+                        <td class="pl-4 py-4">{{ item.customer_fullname }}</td>
+                        <td>{{ item.email_user?.email }}</td>
+                        <td>{{ item.customer_nickname }}</td>
+                        <td>{{ item.customer_telp }}</td>
+                        <td>{{ item.customer_username }}</td>
                         <td>
-                            <button @click="detailPage"
+                            <button @click="detailPage(item.customer_id)"
                                 class="bg-blue-500 hover:bg-blue-400 rounded-md text-white px-3 py-1">Detail</button>
                         </td>
                     </tr>
@@ -105,5 +122,6 @@ export default {
             <Pagination :currentPage="pagination.currentPage" :totalPages="pagination.totalPage"
                 :maxVisiblePages="pagination.maxVisiblePages" @change-page="changePage" />
         </div>
+        <Loading v-model:active="isLoading" color="#2563EB"/>
     </div>
 </template>

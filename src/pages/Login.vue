@@ -36,7 +36,6 @@ export default {
                 this.$router.push({ name: 'dashboard' })
 
             }, (error)=>{
-                console.log(error);
                 swal({
                     title: 'The email or password you entered is incorrect',
                     icon: 'warning'

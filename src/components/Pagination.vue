@@ -97,7 +97,7 @@ export default {
             @click.prevent="changePage(totalPages)">
             <a href="#">{{ totalPages }}</a>
         </li>
-        <li class="w-8 h-8 rounded-md flex justify-center items-center text-lg cursor-pointer select-none"
+        <li class="w-8 h-8 rounded-md flex justify-center items-center text-lg  select-none"
             :class="{ 'bg-[#EEEEEF] hover:bg-[#E9E9EA] cursor-pointer': currentPage != totalPages }"
             @click.prevent="nexPage">
             <p>&gt;</p>

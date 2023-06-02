@@ -1,19 +1,16 @@
 <script setup>
 import $ from 'jquery';
 import Pagination from '@/components/Pagination.vue';
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/css/index.css';
+import swal from 'sweetalert';
+import ApiServices from '../../../services/ApiService';
 </script>
 <script>
 export default {
     data() {
         return {
             details: {
-                fullName: 'Dini Sukarni',
-                nickName: 'Dini',
-                userName: 'Dini123',
-                emailAddress: 'Dini123@gmail.com',
-                phoneNumber: '08123421245631',
-                gender: 'Wanita',
-                address: 'Blok K No. 40',
             },
             pagination: {
                 currentPage: 1,
@@ -22,7 +19,11 @@ export default {
             },
             dropdown: [10, 20, 30, 50],
             currentItemDropDown: 10,
+            isLoading: false
         }
+    },
+    mounted(){
+        this.getDetailCustomer()
     },
     methods: {
         checkFocus() {
@@ -35,6 +36,19 @@ export default {
         },
         changeDropDownItem(num) {
             this.currentItemDropDown = num;
+        },
+        async getDetailCustomer(){
+            this.isLoading = true;
+            await ApiServices.getDetailCustomer(this.$route.params.id, (success)=>{
+                this.isLoading = false;
+                this.details = success.data
+            }, (error)=>{
+                this.isLoading = false
+                swal({
+                    title: 'Data tidak berhasil di ambil',
+                    icon: 'warning'
+                })
+            })
         }
     }
 }
@@ -45,9 +59,9 @@ export default {
             <!-- Image Profile-->
             <figure>
                 <div class="mx-auto w-28 h-28 rounded-lg overflow-hidden">
-                    <img src="@/assets/dummy_art.jpg">
+                    <img :src="details.m_customer_picture?.picture_path">
                 </div>
-                <figcaption class="text-center text-xl mt-2 text-slate-700 tracking-wide">Dini Sukarni</figcaption>
+                <figcaption class="text-center text-xl mt-2 text-slate-700 tracking-wide">{{ details.customer_nickname }}</figcaption>
             </figure>
 
             <!-- Details Profile -->
@@ -56,27 +70,27 @@ export default {
                 <p class="text-gray-500 tracking-widest mb-2">DETAILS</p>
                 <div class="flex mb-1">
                     <p class="font-semibold flex-[0_0_auto] mr-1 text-slate-900">Full Name:</p>
-                    <p class="font-lights ">{{ details.fullName }}</p>
+                    <p class="font-lights ">{{ details.customer_fullname }}</p>
                 </div>
                 <div class="flex mb-1">
                     <p class="font-semibold flex-[0_0_auto] mr-1 text-slate-900">Nick Name:</p>
-                    <p class="font-lights ">{{ details.nickName }}</p>
+                    <p class="font-lights ">{{ details.customer_nickname }}</p>
                 </div>
                 <div class="flex mb-1">
                     <p class="font-semibold flex-[0_0_auto] mr-1 text-slate-900">Username:</p>
-                    <p class="font-lights ">{{ details.userName }}</p>
+                    <p class="font-lights ">{{ details.customer_username }}</p>
                 </div>
                 <div class="flex mb-1">
                     <p class="font-semibold flex-[0_0_auto] mr-1 text-slate-900">Email Address:</p>
-                    <p class="font-lights ">{{ details.emailAddress }}</p>
+                    <p class="font-lights">{{ details.email_user?.email }}</p>
                 </div>
                 <div class="flex mb-1">
                     <p class="font-semibold flex-[0_0_auto] mr-1 text-slate-900">Phone Number:</p>
-                    <p class="font-lights ">{{ details.phoneNumber }}</p>
+                    <p class="font-lights ">{{ details.customer_telp }}</p>
                 </div>
                 <div class="flex mb-1">
                     <p class="font-semibold flex-[0_0_auto] mr-1 text-slate-900">Gender:</p>
-                    <p class="font-lights ">{{ details.gender }}</p>
+                    <p class="font-lights ">{{ details.customer_gender?.gender_value }}</p>
                 </div>
                 <div class="flex mb-1">
                     <p class="font-semibold flex-[0_0_auto] mr-1 text-slate-900">Address:</p>
@@ -134,5 +148,7 @@ export default {
                     :maxVisiblePages="pagination.maxVisiblePages" @change-page="changePage" />
             </div>
         </div>
+        
+        <Loading v-model:active="isLoading" color="#2563EB"/>
     </div>
 </template>

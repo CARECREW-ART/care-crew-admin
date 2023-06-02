@@ -1,6 +1,10 @@
 <script setup>
 import $ from 'jquery';
 import Pagination from '@/components/Pagination.vue';
+import ApiServices from '../../../services/ApiService';
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/css/index.css';
+import swal from 'sweetalert';
 </script>
 
 <script>
@@ -14,18 +18,14 @@ export default {
                 totalPage: 5,
                 maxVisiblePages: 3,
             },
-            artData: [
-                {
-                    name: 'Dino',
-                    email: 'DinoSukinem@gmail.com',
-                    salary: '2.000.000',
-                    phone: '08812321234',
-                    status: 'active'
-                }
-            ]
+            artData: [],
+            search: '',
+            isLoading: false
         }
     },
-    
+    mounted(){
+        this.getAssistant()    
+    },
     methods: {
         checkFocus() {
             if ($('#dropdown').val() == 'ON') {
@@ -35,14 +35,38 @@ export default {
                 $('#dropdown').val('ON');
             }
         },
+        async getAssistant(page){
+            this.isLoading = true;
+            await ApiServices.getAsssistant( this.currentItemDropDown, this.search, page != null ? page : 1,(data)=>{
+            this.isLoading = false;
+            this.artData = data.data;
+            this.pagination.totalPage = Math.ceil(data.total / data.per_page)
+            },(error)=>{
+                this.isLoading = false;
+                swal({
+                    title: 'Data tidak berhasil di ambil',
+                    icon: 'warning'
+                })
+            })
+        },
         changePage(page) {
             this.pagination.currentPage = page;
+            this.getAssistant(page)
         },
         changeDropDownItem(num) {
             this.currentItemDropDown = num;
         },
-        detailPage() {
-            this.$router.push({ name: 'detail-art' });
+        detailPage(id) {
+            this.$router.push({ name: 'detail-art' , params:{id : id}});
+        },
+        formatToRupiah(value){
+            let formatter = Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                currencyDisplay: 'symbol',
+                minimumFractionDigits: 0
+            })
+            return formatter.format(value)
         }
     }
 }
@@ -66,8 +90,8 @@ export default {
                 </div>
             </button>
             <div class="flex p-2 bg-[#d5def3] rounded-md">
-                <input type="text" class="outline-none bg-transparent" placeholder="Search...">
-                <img class="cursor-pointer" src="@/assets/search.svg" />
+                <input v-model="search" type="text" class="outline-none bg-transparent" placeholder="Search..." @keydown.enter="getAssistant()">
+                <img class="cursor-pointer" src="@/assets/search.svg" @click="getAssistant()"/>
             </div>
         </div>
         <div class="w-full h-[1px] bg-[#edebf0]  mt-4"></div>
@@ -85,17 +109,17 @@ export default {
                 </thead>
                 <tbody>
                     <tr v-for="item, index in artData" :key="index" class="border-b-[1px] border-[#edebf0]">
-                        <td class="pl-4 py-4">{{ item.name }}</td>
-                        <td>{{ item.email }}</td>
-                        <td>{{ item.salary }}</td>
-                        <td>{{ item.phone }}</td>
+                        <td class="pl-4 py-4">{{ item.assistant_fullname }}</td>
+                        <td>{{ item.email_user.email }}</td>
+                        <td>{{ formatToRupiah( item.assistant_salary) }}</td>
+                        <td>{{ item.assistant_telp }}</td>
                         <td>
                             <p class="bg-green-100 inline-block py-[2px] px-2 rounded-md text-green-500 ">{{
-                                item.status }}
+                                item.assistant_isactive ? 'Active' : 'Not Actice' }}
                             </p>
                         </td>
                         <td>
-                            <button @click="detailPage"
+                            <button @click="detailPage(item.assistant_id)"
                                 class="bg-blue-500 hover:bg-blue-400 rounded-md text-white px-3 py-1">Detail</button>
                         </td>
                     </tr>
@@ -105,9 +129,10 @@ export default {
 
         </div>
         <div class="flex justify-between w-[98%] mx-auto py-4 items-center">
-            <p>Showing 1 to 20 of enteries</p>
+            <p>Showing {{ pagination.currentPage }} to {{ pagination.totalPage }} of enteries</p>
             <Pagination :currentPage="pagination.currentPage" :totalPages="pagination.totalPage"
                 :maxVisiblePages="pagination.maxVisiblePages" @change-page="changePage" />
         </div>
+        <Loading v-model:active="isLoading" color="#2563EB"/>
     </div>
 </template>

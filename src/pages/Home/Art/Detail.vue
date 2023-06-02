@@ -1,25 +1,15 @@
 <script setup>
 import $ from 'jquery';
 import Pagination from '@/components/Pagination.vue';
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/css/index.css';
+import ApiServices from '../../../services/ApiService';
 </script>
 <script>
 export default {
     data() {
         return {
             details: {
-                fullName: 'Dini Sukarni',
-                nickName: 'Dini',
-                userName: 'Dini123',
-                emailAddress: 'Dini123@gmail.com',
-                phoneNumber: '08123421245631',
-                gender: 'Wanita',
-                address: 'Blok K No. 40',
-                salary: '2.000.000',
-                skill: [
-                    'Memasak', 'Mencuci'
-                ],
-                experience: 'Pernah Bekerja Di Jonggol',
-                accountNumber: 'Bank Jago | Dini Sukarni | 102948253'
             },
             pagination: {
                 currentPage: 1,
@@ -28,7 +18,11 @@ export default {
             },
             dropdown: [10, 20, 30, 50],
             currentItemDropDown: 10,
+            isLoading: false
         }
+    },
+    mounted(){
+        this.getDetailAssistant()
     },
     methods: {
         checkFocus() {
@@ -41,6 +35,36 @@ export default {
         },
         changeDropDownItem(num) {
             this.currentItemDropDown = num;
+        },
+        async getDetailAssistant(){
+            this.isLoading = true
+            await ApiServices.getDetailAssistant(this.$route.params.id, (success)=>{
+                console.log(success)
+                this.details = success
+            }, (error)=>{
+                this.isLoading = false
+                swal({
+                    title: 'Data detail tidak berhasil di ambil',
+                    icon: 'warning'
+                })
+            })
+
+            await ApiServices.getAllBank((success)=>{
+                const findIndex = success.findIndex(bank => {
+                    return bank.bank_id === this.details.m_assistant_accbank.bank_id
+                })
+                this.details.bank = success[findIndex];
+            }, (onError)=>{
+
+                this.isLoading = false
+                swal({
+                    title: 'Data detail tidak berhasil di ambil',
+                    icon: 'warning'
+                })
+            })
+            
+            this.isLoading = false
+
         }
     }
 }
@@ -53,7 +77,7 @@ export default {
                 <div class="mx-auto w-28 h-28 rounded-lg overflow-hidden">
                     <img src="@/assets/dummy_art.jpg">
                 </div>
-                <figcaption class="text-center text-xl mt-2 text-slate-700 tracking-wide">Dini Sukarni</figcaption>
+                <figcaption class="text-center text-xl mt-2 text-slate-700 tracking-wide">{{ details.assistant_nickname }}</figcaption>
             </figure>
 
             <!-- Details Profile -->
@@ -62,27 +86,27 @@ export default {
                 <p class="text-gray-500 tracking-widest mb-2">DETAILS</p>
                 <div class="flex mb-1">
                     <p class="font-semibold flex-[0_0_auto] mr-1 text-slate-900">Full Name:</p>
-                    <p class="font-lights ">{{ details.fullName }}</p>
+                    <p class="font-lights ">{{ details.assistant_fullname }}</p>
                 </div>
                 <div class="flex mb-1">
                     <p class="font-semibold flex-[0_0_auto] mr-1 text-slate-900">Nick Name:</p>
-                    <p class="font-lights ">{{ details.nickName }}</p>
+                    <p class="font-lights ">{{ details.assistant_nickname }}</p>
                 </div>
                 <div class="flex mb-1">
                     <p class="font-semibold flex-[0_0_auto] mr-1 text-slate-900">Username:</p>
-                    <p class="font-lights ">{{ details.userName }}</p>
+                    <p class="font-lights ">{{ details.assistant_username }}</p>
                 </div>
                 <div class="flex mb-1">
                     <p class="font-semibold flex-[0_0_auto] mr-1 text-slate-900">Email Address:</p>
-                    <p class="font-lights ">{{ details.emailAddress }}</p>
+                    <p class="font-lights ">{{ details?.email_user?.email }}</p>
                 </div>
                 <div class="flex mb-1">
                     <p class="font-semibold flex-[0_0_auto] mr-1 text-slate-900">Phone Number:</p>
-                    <p class="font-lights ">{{ details.phoneNumber }}</p>
+                    <p class="font-lights ">{{ details.assistant_telp }}</p>
                 </div>
                 <div class="flex mb-1">
                     <p class="font-semibold flex-[0_0_auto] mr-1 text-slate-900">Gender:</p>
-                    <p class="font-lights ">{{ details.gender }}</p>
+                    <p class="font-lights ">{{ details.assistant_gender?.gender_value }}</p>
                 </div>
                 <div class="flex mb-1">
                     <p class="font-semibold flex-[0_0_auto] mr-1 text-slate-900">Address:</p>
@@ -90,27 +114,27 @@ export default {
                 </div>
                 <div class="flex mb-1">
                     <p class="font-semibold flex-[0_0_auto] mr-1 text-slate-900">Salary:</p>
-                    <p class="font-lights ">{{ details.salary }}</p>
+                    <p class="font-lights ">{{ details.assistant_salary }}</p>
                 </div>
                 <div class="flex mb-1">
-                    <p class="font-semibold flex-[0_0_auto] mr-1 text-slate-900">Skill:</p>
+                    <p class="font-semibold flex-[0_0_auto] mr-1 text-slate-900 self-center">Skill:</p>
                     <p class="font-lights bg-green-400 px-3 py-1 rounded-full text-white mr-2"
-                        v-for="skill in details.skill">
+                        v-for="skill in details.assistant_skills?.split(',')">
                         {{
                             skill }}</p>
                 </div>
                 <div class="flex mb-1">
                     <p class="font-semibold flex-[0_0_auto] mr-1 text-slate-900">Experience:</p>
-                    <p class="font-lights ">{{ details.experience }}</p>
+                    <p class="font-lights ">{{ details.assistant_experience }}</p>
                 </div>
                 <div class="flex">
                     <p class="font-semibold flex-[0_0_auto] mr-1 text-slate-900">Account Number:</p>
-                    <p class="font-lights ">{{ details.accountNumber }}</p>
+                    <p class="font-lights ">{{ details.bank?.bank_name }} | {{ details.m_assistant_accbank?.accbank_value }} | {{ details.m_assistant_accbank?.accbank_name }}</p>
                 </div>
             </div>
         </div>
         <!-- table Pagination -->
-        <div class="basis-[68%] mx-auto h-min bg-white rounded-md shadow-md">
+        <div class="basis-[68%] mx-auto mb-6 h-min bg-white rounded-md shadow-md">
             <!-- drop down -->
             <div class="flex w-full justify-between mt-8 px-5">
                 <button @click="checkFocus" id="dropdown"
@@ -166,6 +190,7 @@ export default {
                 <Pagination :currentPage="pagination.currentPage" :totalPages="pagination.totalPage"
                     :maxVisiblePages="pagination.maxVisiblePages" @change-page="changePage" />
             </div>
+            <Loading v-model:active="isLoading" color="#2563EB"/>
         </div>
     </div>
 </template>

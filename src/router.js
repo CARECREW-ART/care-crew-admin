@@ -42,12 +42,12 @@ const router = createRouter({
 
                 },
                 {
-                    path: 'art/detail',
+                    path: 'art/detail/:id',
                     component: DetailArt,
                     name: 'detail-art'
                 },
                 {
-                    path: 'customer/detail',
+                    path: 'customer/detail/:id',
                     component: DetailCustomer,
                     name: 'detail-customer'
                 }
