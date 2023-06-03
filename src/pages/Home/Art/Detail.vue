@@ -62,6 +62,82 @@ export default {
                     icon: 'warning'
                 })
             })
+
+            if(this.details?.m_assistant_address?.province_id ?? null != null){
+                await ApiServices.getProvince((success)=>{
+                    const findIndex = success.findIndex( province => {
+                        return this.details.m_assistant_address.province_id == province.province_id
+                    } )
+                    this.details.province =  success[findIndex]
+                }, (error)=>{
+                    swal({
+                    title: error,
+                    icon: 'warning'
+                })
+                    this.isLoading = false
+                })
+            }
+
+            if(this.details?.m_assistant_address?.city_id ?? null != null) {
+                await ApiServices.getCity(this.details.m_assistant_address.province_id, (success)=>{
+                    const findIndex = success[0].m_city.findIndex( city => {
+                        return this.details.m_assistant_address.city_id == city.city_id
+                    } )
+                    this.details.city =  success[0].m_city[findIndex]
+                }, (error)=>{
+                    swal({
+                    title: error,
+                    icon: 'warning'
+                })
+                    this.isLoading = false
+                })
+            }
+
+            if(this.details?.m_assistant_address?.district_id ?? null != null){
+                await ApiServices.getDistrict(this.details.m_assistant_address.city_id, (success)=>{
+                    const findIndex = success[0].m_district.findIndex( district =>{
+                        return this.details.m_assistant_address.district_id == district.district_id
+                    } )
+                    this.details.district = success[0].m_district[findIndex]
+                }, (error)=>{
+                    console.log(error)
+                    swal({
+                    title: error,
+                    icon: 'warning'
+                    })
+                    this.isLoading = false
+                })
+            }
+
+            if(this.details?.m_assistant_address?.village_id ?? null != null){
+                await ApiServices.getVillage(this.details.m_assistant_address.district_id, (success)=>{
+                    const findIndex = success[0].m_village.findIndex( village =>{
+                        return this.details.m_assistant_address.village_id == village.village_id
+                    } )
+                    this.details.village = success[0].m_village[findIndex]
+                }, (error)=>{
+                    swal({
+                    title: error,
+                    icon: 'warning'
+                    })
+                    this.isLoading = false
+                })
+            }
+
+            if(this.details?.m_assistant_address?.postalzip_id ?? null != null){
+                await ApiServices.getPostalZip(this.details.m_assistant_address.village_id, (success)=>{
+                    const findIndex = success[0].m_postalzip.findIndex( postal => {
+                        return this.details.m_assistant_address.postalzip_id == postal.postalzip_id
+                    } )
+                    this.details.postal = success[0].m_postalzip[findIndex] 
+                }, (error)=>{
+                    swal({
+                    title: error,
+                    icon: 'warning'
+                    })
+                    this.isLoading = false
+                })
+            }
             
             this.isLoading = false
 
@@ -110,7 +186,7 @@ export default {
                 </div>
                 <div class="flex mb-1">
                     <p class="font-semibold flex-[0_0_auto] mr-1 text-slate-900">Address:</p>
-                    <p class="font-lights ">{{ details.address }}</p>
+                    <p class="font-lights ">{{ details.province?.province_name }} {{ details.city?.city_name ?? null != null ? '| ' + details.city?.city_name : '' }} {{ details.district?.district_name ?? null != null ?  '| ' + details.district?.district_name : ''}} {{ details.village?.village_name ?? null != null ? '| ' + details.village?.village_name : '' }} {{ details.postal?.postalzip_value ?? null != null ? '| ' + details.postal?.postalzip_value : '' }}</p>
                 </div>
                 <div class="flex mb-1">
                     <p class="font-semibold flex-[0_0_auto] mr-1 text-slate-900">Salary:</p>

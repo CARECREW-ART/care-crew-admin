@@ -98,6 +98,89 @@ const ApiServices = {
         }catch(err){
             onError(err.response.data)
         }
+    },
+
+    async getProvince(onSuccess, onError){
+        try{
+            let data = await http.get('/master/province')
+            onSuccess(data.data)
+        }catch(err){
+            onError(err.response.data)
+        }
+    },
+
+    async getCity(id, onSuccess, onError){
+        try{
+            let data = await http.post('/master/city', {
+                'province_id': id
+                },
+                {
+                    headers:{
+                        'X-HTTP-Method-Override': 'GET'
+                    }
+                }
+            )
+            onSuccess(data.data)
+        }catch(err){
+            onError(err.response.data)
+        }
+    },
+
+    async getDistrict(id, onSuccess, onError){
+        try{
+            let data = await http.post(
+                '/master/district',
+                {
+                    'city_id': id
+                },
+                {
+                    headers:{
+                        'X-HTTP-Method-Override': 'GET'
+                    }
+                }
+            )
+            onSuccess(data.data)
+        }catch(err){
+            onError(err.response.data)
+        }
+    },
+
+    async getVillage(id, onSuccess, onError){
+        try{
+            let data = await http.post(
+                '/master/village',
+                {
+                    'district_id': id
+                },
+                {
+                    headers:{
+                        'X-HTTP-Method-Override': 'GET'
+                    }
+                }
+            )
+            onSuccess(data.data)
+        }catch(err){
+            onError(err.response.data)
+        }
+    },
+
+    async getPostalZip(id, onSuccess, onError){
+        try{
+            let data = await http.post(
+                '/master/postalzip',
+                {
+                    'village_id': id
+                },
+                {
+                    headers:{
+                        'X-HTTP-Method-Override': 'GET'
+                    }
+                }
+            )
+            onSuccess(data.data)
+        }catch(err){
+            onError(err.response.data)
+        }
     }
 
 }
