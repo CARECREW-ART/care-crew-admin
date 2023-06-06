@@ -114,7 +114,7 @@ export default {
                         <td>{{ formatToRupiah( item.assistant_salary) }}</td>
                         <td>{{ item.assistant_telp }}</td>
                         <td>
-                            <p class="bg-green-100 inline-block py-[2px] px-2 rounded-md text-green-500 ">{{
+                            <p class="bg-green-100 inline-block py-[2px] px-2 rounded-md text-green-500 " :class="{ 'bg-red-200 text-red-500': item?.assistant_isactive != 1}">{{
                                 item.assistant_isactive ? 'Active' : 'Not Actice' }}
                             </p>
                         </td>

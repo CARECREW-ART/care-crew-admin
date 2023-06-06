@@ -72,6 +72,21 @@ const ApiServices = {
 
     },
 
+    async getAllOrder(perPage, valueSearch, page, onSuccess, onError){
+        try{
+            let token = localStorage.getItem('token')
+            let data = await http.get('/admin/order?perPage='+perPage+'&valueSearch='+valueSearch+'&page='+page,{
+                headers:{
+                    Accept: 'appliaction/json',
+                    Authorization: 'Bearer ' + token
+                }
+            })
+            onSuccess(data.data)
+        }catch(err){
+            onError(err.response.data)
+        }
+    },
+
     async getDetailCustomer(id, onSuccess, onError){
         try{
             let token = localStorage.getItem('token')

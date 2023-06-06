@@ -1,6 +1,10 @@
 <script setup>
 import $ from 'jquery';
 import Pagination from '@/components/Pagination.vue';
+import ApiServices from '../../../services/ApiService';
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/css/index.css';
+import swal from 'sweetalert';
 </script>
 
 <script>
@@ -21,8 +25,13 @@ export default {
                     paymentType: 'Virtual Account',
                     status: 'Success'
                 }
-            ]
+            ],
+            search: '',
+            isLoading: false,
         }
+    },
+    mounted(){
+        this.getAllOrder()
     },
     methods: {
         checkFocus() {
@@ -35,12 +44,27 @@ export default {
         },
         changePage(page) {
             this.pagination.currentPage = page;
+            this.getAllOrder(page)
         },
         changeDropDownItem(num) {
             this.currentItemDropDown = num;
         },
         detailPage() {
             this.$router.push({ name: 'detail-customer' });
+        },
+        async getAllOrder(page){
+            this.isLoading = true
+            await ApiServices.getAllOrder(this.currentItemDropDown, this.search, page != null ? page : 1, (success)=>{
+                this.isLoading = false
+                this.pagination.totalPage = Math.ceil(success.total / success.per_page)
+                this.orderData = success.data
+            }, (error)=>{
+                this.isLoading = false
+                swal({
+                    title: 'Data tidak berhasil di ambil',
+                    icon: 'warning'
+                })
+            })
         }
     }
 }
@@ -65,8 +89,8 @@ export default {
                 </div>
             </button>
             <div class="flex p-2 bg-[#d5def3] rounded-md">
-                <input type="text" class="outline-none bg-transparent" placeholder="Search...">
-                <img class="cursor-pointer" src="@/assets/search.svg" />
+                <input v-model="search" @keydown.enter="getAllOrder()" type="text" class="outline-none bg-transparent" placeholder="Search...">
+                <img class="cursor-pointer" src="@/assets/search.svg" @click="getAllOrder()"/>
             </div>
         </div>
         <div class="w-full h-[1px] bg-[#edebf0]  mt-4"></div>
@@ -83,13 +107,13 @@ export default {
                     <tr v-for="item, index in orderData" :key="index" class="border-b-[1px] border-[#edebf0]">
                         <td class="pl-4 py-4 flex items-center">
                             <div class="h-12 w-12 mr-2 overflow-hidden rounded-full">
-                                <img src="@/assets/dummy_art.jpg" alt="profile">
+                                <img :src="item.m_assistant?.m_assistant_picture?.picture_path ?? ''"  alt="profile">
                             </div>
-                            <p>{{ item.customerName }}</p>
+                            <p>{{ item.m_assistant?.assistant_fullname ?? '' }}</p>
                         </td>
-                        <td>{{ item.paymentType }}</td>
+                        <td>{{ item.payment_type }}</td>
                         <td>
-                            <p class="inline px-4 py-2 bg-green-300 text-white rounded-full">{{ item.status }}</p>
+                            <p class="inline px-4 py-2 bg-green-500 text-white rounded-full" :class="{'!bg-red-500': item.payment_status == 'Expired', '!bg-yellow-600': item.payment_status == 'Created',  '!bg-blue-800': item.payment_status == 'Waiting For Payment'}">{{ item.payment_status}}</p>
                         </td>
                     </tr>
                 </tbody>
@@ -101,6 +125,7 @@ export default {
             <p>Showing 1 to 20 of enteries</p>
             <Pagination :currentPage="pagination.currentPage" :totalPages="pagination.totalPage"
                 :maxVisiblePages="pagination.maxVisiblePages" @change-page="changePage" />
+                <Loading v-model:active="isLoading" color="#2563EB"/>
         </div>
     </div>
 </template>

@@ -133,7 +133,7 @@ export default {
 </script>
 <template>
     <div class="flex">
-        <div class='basis-[30%] pt-8 pb-8 mb-6 bg-white rounded-md shadow-md'>
+        <div class='basis-[100%] pt-8 pb-8 mb-6 bg-white rounded-md shadow-md'>
             <!-- Image Profile-->
             <figure>
                 <div class="mx-auto w-28 h-28 rounded-lg overflow-hidden">
@@ -175,58 +175,11 @@ export default {
                     <p class="font-lights ">{{ details.province?.province_name }} {{ details.city?.city_name ?? null != null ? '| ' + details.city?.city_name : '' }} {{ details.district?.district_name ?? null != null ?  '| ' + details.district?.district_name : ''}} {{ details.village?.village_name ?? null != null ? '| ' + details.village?.village_name : '' }} {{ details.postal?.postalzip_value ?? null != null ? '| ' + details.postal?.postalzip_value : '' }}</p>
                 </div>
             </div>
+        <Loading v-model:active="isLoading" color="#2563EB"/>
+
         </div>
         <!-- table Pagination -->
-        <div class="basis-[68%] mx-auto h-min bg-white rounded-md shadow-md">
-            <!-- drop down -->
-            <div class="flex w-full justify-between mt-8 px-5">
-                <button @click="checkFocus" id="dropdown"
-                    class="group flex relative border border-black w-14 rounded-md items-center justify-evenly" value="OFF">
-                    <p>{{ currentItemDropDown }}</p>
-                    <img class="transition-all group-focus:rotate-180" src="@/assets/arrow_down.svg" alt="">
-                    <div
-                        class="hidden group-focus:block absolute bottom-[-130px] bg-white drop-shadow-md rounded-md w-full p-2">
-                        <ul>
-                            <li v-for="(item, index) in dropdown" :key="index" class="hover:bg-[#f1f4fa] rounded-md mb-1"
-                                @click="changeDropDownItem(item)"
-                                :class="{ '!text-blue-800 !bg-[#dbecfa] ': currentItemDropDown == item }">{{ item
-                                }}</li>
-                        </ul>
-                    </div>
-                </button>
-                <div class="flex p-2 bg-[#d5def3] rounded-md">
-                    <input type="text" class="outline-none bg-transparent" placeholder="Search...">
-                    <img class="cursor-pointer" src="@/assets/search.svg" />
-                </div>
-            </div>
-
-            <div class="w-full h-[1px] bg-[#edebf0]  mt-4"></div>
-            <!-- table -->
-            <table class="w-full">
-                <thead class="text-left border-b-[1px] border-[#edebf0]">
-                    <th class="pl-4 py-4">Payment Type</th>
-                    <th>Status</th>
-                </thead>
-                <tbody>
-                    <tr class="border-b-[1px] border-[#edebf0]">
-                        <td class="pl-4 py-6 flex items-center">
-                            <p>Virtual Account</p>
-                        </td>
-                        <td>
-                            <p class="inline px-3 py-2 rounded-full bg-green-300 text-white">Success</p>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <!-- Pagination -->
-            <div class="flex justify-between w-[98%] mx-auto py-4 items-center">
-                <p>Showing 1 to 20 of enteries</p>
-                <Pagination :currentPage="pagination.currentPage" :totalPages="pagination.totalPage"
-                    :maxVisiblePages="pagination.maxVisiblePages" @change-page="changePage" />
-            </div>
-        </div>
         
-        <Loading v-model:active="isLoading" color="#2563EB"/>
+        
     </div>
 </template>
