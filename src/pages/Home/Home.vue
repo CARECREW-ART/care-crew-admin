@@ -22,7 +22,10 @@ export default {
 <template>
     <div class="w-screen h-screen flex overflow-auto">
         <div class="group w-[6%] hover:w-[19%] flex flex-col items-center pt-3 transition-all sticky top-0">
-            <p class="w-4/5">Care Crew</p>
+            <div class="flex w-4/5 items-center mb-2">
+                <img  src="@/assets/logo-CareCrew.svg" width="50"/>
+                <p class="w-4/5 text-xl ml-4 hidden group-hover:block">Care Crew</p>  
+            </div>
             <div class="flex w-4/5 h-11 justify-center group-hover:justify-normal group-hover:pl-2 items-center rounded-md hover:bg-[#eeeeee65] hover:cursor-pointer"
                 :class="{ '!bg-gradient-to-l from-sky-300 to-blue-600': activeItem == 'dashboard' }"
                 @click="changeItemNav('dashboard')">

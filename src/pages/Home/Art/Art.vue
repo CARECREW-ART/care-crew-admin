@@ -119,7 +119,7 @@ export default {
                             </p>
                         </td>
                         <td>
-                            <button @click="detailPage(item.assistant_id)"
+                            <button @click="detailPage(item.user_id)"
                                 class="bg-blue-500 hover:bg-blue-400 rounded-md text-white px-3 py-1">Detail</button>
                         </td>
                     </tr>

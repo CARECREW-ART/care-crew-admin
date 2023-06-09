@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 const http = axios.create({
-    baseURL:'https://be-careCrew.test/api',
+    baseURL:'https://be-carecrew.letstartdreaming.web.id/api',
 }) ;
 
 

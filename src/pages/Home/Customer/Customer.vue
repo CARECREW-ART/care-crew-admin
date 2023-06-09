@@ -108,7 +108,7 @@ export default {
                         <td>{{ item.customer_telp }}</td>
                         <td>{{ item.customer_username }}</td>
                         <td>
-                            <button @click="detailPage(item.customer_id)"
+                            <button @click="detailPage(item.user_id)"
                                 class="bg-blue-500 hover:bg-blue-400 rounded-md text-white px-3 py-1">Detail</button>
                         </td>
                     </tr>
