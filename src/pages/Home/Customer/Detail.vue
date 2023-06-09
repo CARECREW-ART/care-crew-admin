@@ -1,0 +1,185 @@
+<script setup>
+import $ from 'jquery';
+import Pagination from '@/components/Pagination.vue';
+import Loading from 'vue-loading-overlay';
+import 'vue-loading-overlay/dist/css/index.css';
+import swal from 'sweetalert';
+import ApiServices from '../../../services/ApiService';
+</script>
+<script>
+export default {
+    data() {
+        return {
+            details: {
+            },
+            pagination: {
+                currentPage: 1,
+                totalPage: 5,
+                maxVisiblePages: 3,
+            },
+            dropdown: [10, 20, 30, 50],
+            currentItemDropDown: 10,
+            isLoading: false
+        }
+    },
+    mounted(){
+        this.getDetailCustomer()
+    },
+    methods: {
+        checkFocus() {
+            if ($('#dropdown').val() == 'ON') {
+                $('#dropdown').blur();
+                $('#dropdown').val('OFF');
+            } else {
+                $('#dropdown').val('ON');
+            }
+        },
+        changeDropDownItem(num) {
+            this.currentItemDropDown = num;
+        },
+        async getDetailCustomer(){
+            this.isLoading = true;
+            await ApiServices.getDetailCustomer(this.$route.params.id, (success)=>{
+                this.details = success.data
+            }, (error)=>{
+                this.isLoading = false;
+
+                swal({
+                    title: 'Data tidak berhasil di ambil',
+                    icon: 'warning'
+                })
+            })
+
+            if(this.details?.m_customer_address?.province_id ?? null != null){
+                await ApiServices.getProvince((success)=>{
+                    const findIndex = success.findIndex( province => {
+                        return this.details.m_customer_address.province_id == province.province_id
+                    } )
+                    this.details.province =  success[findIndex]
+                }, (error)=>{
+                    swal({
+                    title: error,
+                    icon: 'warning'
+                })
+                    this.isLoading = false
+                })
+            }
+
+            if(this.details?.m_customer_address?.city_id ?? null != null) {
+                await ApiServices.getCity(this.details.m_customer_address.province_id, (success)=>{
+                    const findIndex = success[0].m_city.findIndex( city => {
+                        return this.details.m_customer_address.city_id == city.city_id
+                    } )
+                    this.details.city =  success[0].m_city[findIndex]
+                }, (error)=>{
+                    swal({
+                    title: error,
+                    icon: 'warning'
+                })
+                    this.isLoading = false
+                })
+            }
+
+            if(this.details?.m_customer_address?.district_id ?? null != null){
+                await ApiServices.getDistrict(this.details.m_customer_address.city_id, (success)=>{
+                    const findIndex = success[0].m_district.findIndex( district =>{
+                        return this.details.m_customer_address.district_id == district.district_id
+                    } )
+                    this.details.district = success[0].m_district[findIndex]
+                }, (error)=>{
+                    console.log(error)
+                    swal({
+                    title: error,
+                    icon: 'warning'
+                    })
+                    this.isLoading = false
+                })
+            }
+
+            if(this.details?.m_customer_address?.village_id ?? null != null){
+                await ApiServices.getVillage(this.details.m_customer_address.district_id, (success)=>{
+                    const findIndex = success[0].m_village.findIndex( village =>{
+                        return this.details.m_customer_address.village_id == village.village_id
+                    } )
+                    this.details.village = success[0].m_village[findIndex]
+                }, (error)=>{
+                    swal({
+                    title: error,
+                    icon: 'warning'
+                    })
+                    this.isLoading = false
+                })
+            }
+
+            if(this.details?.m_customer_address?.postalzip_id ?? null != null){
+                await ApiServices.getPostalZip(this.details.m_customer_address.village_id, (success)=>{
+                    const findIndex = success[0].m_postalzip.findIndex( postal => {
+                        return this.details.m_customer_address.postalzip_id == postal.postalzip_id
+                    } )
+                    this.details.postal = success[0].m_postalzip[findIndex] 
+                }, (error)=>{
+                    swal({
+                    title: error,
+                    icon: 'warning'
+                    })
+                    this.isLoading = false
+                })
+            }
+
+            this.isLoading = false
+        }
+    }
+}
+</script>
+<template>
+    <div class="flex">
+        <div class='basis-[100%] pt-8 pb-8 mb-6 bg-white rounded-md shadow-md'>
+            <!-- Image Profile-->
+            <figure>
+                <div class="mx-auto w-28 h-28 rounded-lg overflow-hidden">
+                    <img :src="details.m_customer_picture?.picture_path">
+                </div>
+                <figcaption class="text-center text-xl mt-2 text-slate-700 tracking-wide">{{ details.customer_nickname }}</figcaption>
+            </figure>
+
+            <!-- Details Profile -->
+            <div class="w-full h-[1px] mt-2 bg-gray-200"></div>
+            <div class="mt-2 ml-3">
+                <p class="text-gray-500 tracking-widest mb-2">DETAILS</p>
+                <div class="flex mb-1">
+                    <p class="font-semibold flex-[0_0_auto] mr-1 text-slate-900">Full Name:</p>
+                    <p class="font-lights ">{{ details.customer_fullname }}</p>
+                </div>
+                <div class="flex mb-1">
+                    <p class="font-semibold flex-[0_0_auto] mr-1 text-slate-900">Nick Name:</p>
+                    <p class="font-lights ">{{ details.customer_nickname }}</p>
+                </div>
+                <div class="flex mb-1">
+                    <p class="font-semibold flex-[0_0_auto] mr-1 text-slate-900">Username:</p>
+                    <p class="font-lights ">{{ details.customer_username }}</p>
+                </div>
+                <div class="flex mb-1">
+                    <p class="font-semibold flex-[0_0_auto] mr-1 text-slate-900">Email Address:</p>
+                    <p class="font-lights">{{ details.email_user?.email }}</p>
+                </div>
+                <div class="flex mb-1">
+                    <p class="font-semibold flex-[0_0_auto] mr-1 text-slate-900">Phone Number:</p>
+                    <p class="font-lights ">{{ details.customer_telp }}</p>
+                </div>
+                <div class="flex mb-1">
+                    <p class="font-semibold flex-[0_0_auto] mr-1 text-slate-900">Gender:</p>
+                    <p class="font-lights ">{{ details.customer_gender?.gender_value }}</p>
+                </div>
+                <div class="flex mb-1">
+                    <p class="font-semibold flex-[0_0_auto] mr-1 text-slate-900">Address:</p>
+                    <p class="font-lights ">{{ details.province?.province_name }} {{ details.city?.city_name ?? null != null ? '| ' + details.city?.city_name : '' }} {{ details.district?.district_name ?? null != null ?  '| ' + details.district?.district_name : ''}} {{ details.village?.village_name ?? null != null ? '| ' + details.village?.village_name : '' }} {{ details.postal?.postalzip_value ?? null != null ? '| ' + details.postal?.postalzip_value : '' }}</p>
+                </div>
+            </div>
+        <Loading v-model:active="isLoading" color="#2563EB"/>
+
+        </div>
+        <!-- table Pagination -->
+        
+        
+    </div>
+</template>
