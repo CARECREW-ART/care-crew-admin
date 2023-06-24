@@ -88,7 +88,7 @@ export default {
                 <!-- Email -->
                 <TextField titleField="Email Address" v-model:error="emailError" v-model:text="email" @validator="emailValidator" type="email" class="mb-3"/>
                 <!-- password -->
-                <TextField titleField="Password" v-model:error="passwordError" v-model:text="password" type="password" @validator="passwordValidator" />
+                <TextField titleField="Password" v-model:error="passwordError" v-model:text="password" type="password" @validator="passwordValidator" @keyup.enter="login(email, password)" />
                 <div class="flex items-center">
                     <input v-model="remember" type="checkbox" name="" id="">
                     <p class="ml-1">Remember me</p>
