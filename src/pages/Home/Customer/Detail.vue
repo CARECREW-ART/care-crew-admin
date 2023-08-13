@@ -136,10 +136,9 @@ export default {
         <div class='basis-[100%] pt-8 pb-8 mb-6 bg-white rounded-md shadow-md'>
             <!-- Image Profile-->
             <figure>
-                <div class="mx-auto w-28 h-28 rounded-lg overflow-hidden">
+                <div class="mx-auto w-96 h-96 rounded-lg overflow-hidden">
                     <img :src="details.m_customer_picture?.picture_path">
                 </div>
-                <figcaption class="text-center text-xl mt-2 text-slate-700 tracking-wide">{{ details.customer_nickname }}</figcaption>
             </figure>
 
             <!-- Details Profile -->

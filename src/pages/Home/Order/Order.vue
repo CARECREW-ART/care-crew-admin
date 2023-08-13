@@ -113,7 +113,7 @@ export default {
                         </td>
                         <td>{{ item.payment_type }}</td>
                         <td>
-                            <p class="inline px-4 py-2 bg-green-500 text-white rounded-full" :class="{'!bg-red-500': item.payment_status == 'Expired', '!bg-yellow-600': item.payment_status == 'Created',  '!bg-blue-800': item.payment_status == 'Waiting For Payment'}">{{ item.payment_status}}</p>
+                            <p class="inline px-4 py-2 bg-green-500 text-white rounded-full" :class="{'!bg-gray-600': item.payment_status == 'Expired', '!bg-red-500': item.payment_status == 'Canceled', '!bg-sky-500': item.payment_status == 'Created',  '!bg-yellow-600': item.payment_status == 'Waiting For Payment'}">{{ item.payment_status}}</p>
                         </td>
                     </tr>
                 </tbody>

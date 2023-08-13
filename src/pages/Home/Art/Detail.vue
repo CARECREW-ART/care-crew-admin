@@ -36,6 +36,15 @@ export default {
         changeDropDownItem(num) {
             this.currentItemDropDown = num;
         },
+        formatToRupiah(value){
+            let formatter = Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR',
+                currencyDisplay: 'symbol',
+                minimumFractionDigits: 0
+            })
+            return formatter.format(value)
+        },
         async getDetailAssistant(){
             this.isLoading = true
             await ApiServices.getDetailAssistant(this.$route.params.id, (success)=>{
@@ -150,10 +159,9 @@ export default {
         <div class='basis-[100%] pt-8 pb-8 mb-6 bg-white rounded-md shadow-md'>
             <!-- Image Profile-->
             <figure>
-                <div class="mx-auto w-28 h-28 rounded-lg overflow-hidden">
+                <div class="mx-auto w-96 h-96 rounded-lg overflow-hidden">
                     <img :src="details.m_assistant_picture?.picture_path ?? ''">
                 </div>
-                <figcaption class="text-center text-xl mt-2 text-slate-700 tracking-wide">{{ details.assistant_nickname }}</figcaption>
             </figure>
 
             <!-- Details Profile -->
@@ -190,7 +198,7 @@ export default {
                 </div>
                 <div class="flex mb-1">
                     <p class="font-semibold flex-[0_0_auto] mr-1 text-slate-900">Salary:</p>
-                    <p class="font-lights ">{{ details.assistant_salary }}</p>
+                    <p class="font-lights ">{{ formatToRupiah( details.assistant_salary) }}</p>
                 </div>
                 <div class="flex mb-1">
                     <p class="font-semibold flex-[0_0_auto] mr-1 text-slate-900 self-center">Skill:</p>
